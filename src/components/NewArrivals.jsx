@@ -6,19 +6,19 @@ export default function NewArrivals() {
       name: "Smart Watch Pro",
       desc: "Advanced smartwatch with fitness tracking, heart rate monitoring, and GPS.",
       price: "$399.99",
-      img: "/images/new1.jpg",
+      img: "/images/Watch.avif",
     },
     {
       name: "Leather Wallet",
       desc: "Genuine leather wallet with RFID protection and multiple card slots.",
       price: "$49.99",
-      img: "/images/new2.jpg",
+      img: "/images/Leather Wallet.avif",
     },
     {
       name: "Portable Bluetooth Speaker",
       desc: "Compact wireless speaker with 360-degree sound and waterproof design.",
       price: "$79.99",
-      img: "/images/new3.jpg",
+      img: "/images/new2.avif",
     },
   ];
 

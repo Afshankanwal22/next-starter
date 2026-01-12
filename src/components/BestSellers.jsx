@@ -1,10 +1,10 @@
 "use client";
 export default function BestSellers() {
   const bestSellers = [
-    { name:"Premium Wireless Headphones", desc:"Premium Wireless Headphones", price:"$299.99", img:"/images/best1.jpg" },
-    { name:"Smart Watch Pro", desc:"Smart Watch Pro", price:"$399.99", img:"/images/best2.jpg" },
-    { name:"Professional Camera", desc:"Professional Camera", price:"$1299.99", img:"/images/best3.jpg" },
-    { name:"Sunglasses Classic", desc:"Sunglasses Classic", price:"$159.99", img:"/images/best4.jpg" },
+    { name:"Premium Wireless Headphones", desc:"Premium Wireless Headphones", price:"$299.99", img:"/images/Headphones.avif" },
+    { name:"Smart Watch Pro", desc:"Smart Watch Pro", price:"$399.99", img:"/images/Smart Watch Pro.avif" },
+    { name:"Professional Camera", desc:"Professional Camera", price:"$1299.99", img:"/images/Professional Camera.avif" },
+    { name:"Sunglasses Classic", desc:"Sunglasses Classic", price:"$159.99", img:"/images/Sunglasses Classic.avif" },
   ];
 
   return (
