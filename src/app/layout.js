@@ -7,11 +7,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="bg-gray-100">
-        <Navbar />
+        {/* <Navbar /> */}
        
         <main>{children}</main>
       
-        <Footer />
+        {/* <Footer /> */}
       </body>
     </html>
   );

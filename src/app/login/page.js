@@ -2,24 +2,58 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import Swal from "sweetalert2";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function Login() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Logging in:", { email, password });
-    // 🔹 Firebase/Supabase login call yahan
+    setLoading(true);
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    setLoading(false);
+
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text: error.message,
+      });
+      return;
+    }
+
+    Swal.fire({
+      icon: "success",
+      title: "Login Successful 🎉",
+      text: "Welcome back to ShopHub",
+      timer: 1500,
+      showConfirmButton: false,
+    });
+
+    // 🔁 Redirect to Home Page
+    setTimeout(() => {
+      router.push("/");
+    }, 1500);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-100">
       <div className="bg-white shadow-2xl rounded-2xl p-10 w-full max-w-md relative overflow-hidden">
         
-        {/* Decorative Circles for Realistic Feel */}
+        {/* Decorative Circles */}
         <div className="absolute -top-10 -left-10 w-32 h-32 bg-blue-200 rounded-full opacity-50"></div>
         <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-300 rounded-full opacity-50"></div>
 
@@ -40,7 +74,7 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm transition"
+              className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
@@ -53,12 +87,12 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm transition pr-12"
+              className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-400 pr-12"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute top-9 right-4 text-gray-400 hover:text-gray-700 transition"
+              className="absolute top-9 right-4 text-gray-400"
             >
               {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
             </button>
@@ -67,43 +101,17 @@ export default function Login() {
           {/* Login Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition shadow-md"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition"
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-
-        {/* Divider */}
-        <div className="flex items-center my-6 relative z-10">
-          <hr className="flex-grow border-gray-300" />
-          <span className="mx-2 text-gray-400">OR</span>
-          <hr className="flex-grow border-gray-300" />
-        </div>
-
-        {/* Social Login Buttons */}
-        <div className="flex flex-col space-y-3 relative z-10">
-          <button className="w-full flex items-center justify-center border border-gray-300 py-3 rounded-xl hover:bg-gray-100 transition">
-            <img
-              src="/images/google-logo.png"
-              alt="Google"
-              className="w-6 h-6 mr-2"
-            />
-            Login with Google
-          </button>
-          <button className="w-full flex items-center justify-center border border-gray-300 py-3 rounded-xl hover:bg-gray-100 transition">
-            <img
-              src="/images/facebook-logo.png"
-              alt="Facebook"
-              className="w-6 h-6 mr-2"
-            />
-            Login with Facebook
-          </button>
-        </div>
 
         {/* Signup Link */}
         <p className="mt-6 text-center text-gray-500 relative z-10">
           Don't have an account?{" "}
-          <Link href="/signup" className="text-blue-600 font-semibold hover:underline">
+          <Link href="/signup" className="text-blue-600 font-semibold">
             Sign Up
           </Link>
         </p>
