@@ -16,9 +16,9 @@ export default function HeroSlider() {
   };
 
   const slides = [
-    "/images/slide1.jpg",
-    "/images/slide2.jpg",
-    "/images/slide3.jpg",
+    "images/silder7.avif",
+    "/images/silder6.avif",
+    "/images/silder5.avif",
   ];
 
   return (
@@ -29,7 +29,7 @@ export default function HeroSlider() {
             <img
               src={img}
               alt={`Slide ${index + 1}`}
-              className="w-full h-80 md:h-[500px] object-cover rounded-xl"
+              className="w-full h-80 md:h-[500px] object-cover "
             />
           </div>
         ))}

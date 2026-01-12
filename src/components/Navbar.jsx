@@ -2,110 +2,106 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { FiShoppingCart, FiMenu, FiX, FiUser } from "react-icons/fi"; // FiUser added
+import {
+  FiShoppingCart,
+  FiMenu,
+  FiX,
+  FiUser,
+  FiSearch,
+} from "react-icons/fi";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(2);
+  const [cartCount] = useState(2);
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
         {/* Logo */}
-        <Link href="/" className="text-2xl font-bold text-blue-600">
-          <img src="/logo.jpeg" alt=""width={50} />
+        <Link href="/" className="flex items-center gap-2">
+          <img src="/logo.jpeg" alt="Logo" className="w-10 h-10 rounded-full" />
+          <span className="font-bold text-xl text-gray-800 tracking-wide">
+            ShopEase
+          </span>
         </Link>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-6">
-          <Link href="/" className="hover:text-blue-600 transition">
-            Home
-          </Link>
-          <Link href="/shop" className="hover:text-blue-600 transition">
-            Shop
-          </Link>
-          <Link href="/about" className="hover:text-blue-600 transition">
-            About
-          </Link>
-          <Link href="/contact" className="hover:text-blue-600 transition">
-            Contact
-          </Link>
-          
+        {/* Desktop Links */}
+        <div className="hidden md:flex items-center gap-8 font-medium text-gray-700">
+          {["Home", "Shop", "About", "Contact"].map((item) => (
+            <Link
+              key={item}
+              href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+              className="relative group"
+            >
+              {item}
+              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-blue-600 transition-all group-hover:w-full"></span>
+            </Link>
+          ))}
         </div>
 
-        {/* Search + Cart */}
-        <div className="hidden md:flex items-center space-x-4">
-          <input
-            type="text"
-            placeholder="Search products..."
-            className="border rounded-full px-4 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+        {/* Right Actions */}
+        <div className="hidden md:flex items-center gap-4">
+
+          {/* Search */}
           <div className="relative">
-            <FiShoppingCart size={24} className="text-gray-700" />
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 " />
+            <input
+              type="text"
+              placeholder="Search products..."
+              className="pl-9 pr-4 py-2 w-56 rounded-full border focus:ring-2 focus:ring-blue-400 outline-none"
+            />
+          </div>
+
+          {/* Cart */}
+          <div className="relative cursor-pointer hover:scale-105 transition">
+            <FiShoppingCart size={22} />
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full animate-pulse">
                 {cartCount}
               </span>
             )}
-            
           </div>
-          {/* Login Button */}
+
+          {/* Login */}
           <Link
             href="/login"
-            className="flex items-center space-x-1 border border-blue-600 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-600 hover:text-white transition"
+            className="flex items-center gap-1 px-4 py-2 rounded-full border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition"
           >
             <FiUser />
-            <span>Login</span>
+            Login
           </Link>
         </div>
 
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
-          <button onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <FiX size={28} /> : <FiMenu size={28} />}
-          </button>
-        </div>
+        {/* Mobile Button */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="md:hidden text-gray-700"
+        >
+          {isOpen ? <FiX size={28} /> : <FiMenu size={28} />}
+        </button>
       </div>
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white px-6 pb-4 space-y-4">
-          <Link href="/" className="block hover:text-blue-600 transition">
-            Home
-          </Link>
-          <Link href="/shop" className="block hover:text-blue-600 transition">
-            Shop
-          </Link>
-          <Link href="/about" className="block hover:text-blue-600 transition">
-            About
-          </Link>
-          <Link href="/contact" className="block hover:text-blue-600 transition">
-            Contact
-          </Link>
-          {/* Mobile Login */}
+        <div className="md:hidden bg-white px-6 py-4 space-y-4 border-t">
+          {["Home", "Shop", "About", "Contact"].map((item) => (
+            <Link
+              key={item}
+              href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+              className="block font-medium text-gray-700"
+              onClick={() => setIsOpen(false)}
+            >
+              {item}
+            </Link>
+          ))}
+
           <Link
             href="/login"
-            className="flex items-center space-x-1 border border-blue-600 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-600 hover:text-white transition"
+            className="flex items-center gap-2 w-fit border border-blue-600 px-4 py-2 rounded-full text-blue-600"
           >
-            <FiUser />
-            <span>Login</span>
+            <FiUser /> Login
           </Link>
-
-          <div className="flex items-center space-x-2 mt-2">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="border rounded-full px-3 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-            <div className="relative">
-              <FiShoppingCart size={24} className="text-gray-700" />
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </div>
-          </div>
         </div>
       )}
     </nav>

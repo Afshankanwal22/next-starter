@@ -2,10 +2,15 @@ import HeroSlider from "../components/Silder.jsx";
 import ShopByCategory from "../components/ShopByCategory.jsx";
 import BestSellers from "../components/BestSellers.jsx";
 import NewArrivals from "../components/NewArrivals.jsx";
+import Navbar from "../components/Navbar.jsx";
+import Footer from "../components/Footer.jsx";
 
 export default function Home() {
   return (
     <div>
+      {/*Navbar */}
+      <Navbar />
+
       {/* Hero Slider */}
       <HeroSlider />
       {/* shopbycategory */}
@@ -62,6 +67,8 @@ export default function Home() {
     <BestSellers />
     {/* New Arrivals Section */}
     <NewArrivals />
+    {/* Footer Section */}
+    <Footer />
     </div>
    
 
