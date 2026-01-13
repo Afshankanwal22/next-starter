@@ -20,9 +20,14 @@ export default function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <img src="/logo.jpeg" alt="Logo" className="w-10 h-10 rounded-full" />
+         <img
+  src="/images/logo.jpeg"
+  alt="Zanorox Logo"
+  className="w-15  object-contain rounded-lg shadow-xl animate-pulse"
+/>
+
           <span className="font-bold text-xl text-gray-800 tracking-wide">
-            ShopEase
+            Zanorox
           </span>
         </Link>
 
