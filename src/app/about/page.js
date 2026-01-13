@@ -66,7 +66,7 @@ export default function About() {
         {/* IMAGE */}
         <div className="relative group">
           <img
-            src="https://images.unsplash.com/photo-1607082349566-1870bcd1e90f"
+            src="https://plus.unsplash.com/premium_photo-1684785618727-378a3a5e91c5?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZWNvbW1lcmNlfGVufDB8fDB8fHww"
             alt="Ecommerce Experience"
             className="rounded-3xl shadow-2xl transform group-hover:scale-105 transition duration-500"
           />
