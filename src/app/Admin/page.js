@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
+import Swal from "sweetalert2";
 
 export default function AdminPage() {
   const [products, setProducts] = useState([]);
@@ -20,6 +21,7 @@ export default function AdminPage() {
       .from("product")
       .select("*")
       .order("id", { ascending: false });
+
     if (error) console.log(error);
     else setProducts(data);
   };
@@ -33,8 +35,6 @@ export default function AdminPage() {
     if (imageFile) {
       const objectUrl = URL.createObjectURL(imageFile);
       setPreview(objectUrl);
-
-      // Clean up
       return () => URL.revokeObjectURL(objectUrl);
     } else if (imageURL) {
       setPreview(imageURL);
@@ -51,7 +51,6 @@ export default function AdminPage() {
     let finalImage = "";
 
     if (imageFile) {
-      // Upload to Supabase Storage (example bucket "product-images")
       const fileExt = imageFile.name.split(".").pop();
       const fileName = `${Date.now()}.${fileExt}`;
       const { data, error: uploadError } = await supabase.storage
@@ -59,7 +58,11 @@ export default function AdminPage() {
         .upload(fileName, imageFile);
 
       if (uploadError) {
-        alert(uploadError.message);
+        Swal.fire({
+          icon: "error",
+          title: "Upload Failed ❌",
+          text: uploadError.message,
+        });
         setLoading(false);
         return;
       }
@@ -76,9 +79,26 @@ export default function AdminPage() {
       { name, price: Number(price), description, image: finalImage },
     ]);
 
-    if (error) alert(error.message);
-    else {
-      alert("Product Added Successfully ✅");
+    if (error) {
+      if (error.message.includes("row-level security")) {
+        Swal.fire({
+          icon: "warning",
+          title: "RLS is ON ⚠️",
+          text: "Please disable Row-Level Security for the 'product' table in Supabase Dashboard.",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Failed ❌",
+          text: error.message,
+        });
+      }
+    } else {
+      Swal.fire({
+        icon: "success",
+        title: "Product Added ✅",
+        text: `${name} has been added successfully!`,
+      });
       setName("");
       setPrice("");
       setDescription("");
@@ -92,11 +112,35 @@ export default function AdminPage() {
   };
 
   // Delete product
-  const deleteProduct = async (id) => {
-    if (!confirm("Are you sure you want to delete this product?")) return;
-    const { error } = await supabase.from("product").delete().eq("id", id);
-    if (error) alert(error.message);
-    else fetchProducts();
+  const deleteProduct = async (id, productName) => {
+    const result = await Swal.fire({
+      title: `Delete ${productName}?`,
+      text: "This action cannot be undone!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+    });
+
+    if (result.isConfirmed) {
+      const { error } = await supabase.from("product").delete().eq("id", id);
+      if (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Failed ❌",
+          text: error.message,
+        });
+      } else {
+        Swal.fire({
+          icon: "success",
+          title: "Deleted ✅",
+          text: `${productName} has been removed.`,
+        });
+        fetchProducts();
+      }
+    }
   };
 
   return (
@@ -104,6 +148,13 @@ export default function AdminPage() {
       <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">
         Admin Dashboard – Products
       </h1>
+
+      {/* RLS Warning */}
+      <div className="max-w-xl mx-auto mb-6">
+        <div className="bg-yellow-100 text-yellow-800 px-4 py-3 rounded-lg text-center">
+          ⚠️ Ensure <strong>Row-Level Security (RLS)</strong> is disabled for the "product" table in Supabase.
+        </div>
+      </div>
 
       {/* Add Product Form */}
       <div className="bg-white shadow-2xl rounded-3xl p-8 max-w-xl mx-auto mb-12">
@@ -220,13 +271,13 @@ export default function AdminPage() {
                   <td className="px-6 py-4 text-blue-600 font-bold">{product.price}</td>
                   <td className="px-6 py-4 flex gap-3">
                     <button
-                      onClick={() => alert("Edit feature coming soon!")}
+                      onClick={() => Swal.fire("Edit feature coming soon!")}
                       className="flex items-center gap-1 px-3 py-1 bg-yellow-400 text-white rounded-lg hover:bg-yellow-500 transition"
                     >
                       <FiEdit /> Edit
                     </button>
                     <button
-                      onClick={() => deleteProduct(product.id)}
+                      onClick={() => deleteProduct(product.id, product.name)}
                       className="flex items-center gap-1 px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
                     >
                       <FiTrash2 /> Delete
