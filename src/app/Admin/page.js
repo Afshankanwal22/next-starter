@@ -151,9 +151,7 @@ export default function AdminPage() {
 
       {/* RLS Warning */}
       <div className="max-w-xl mx-auto mb-6">
-        <div className="bg-yellow-100 text-yellow-800 px-4 py-3 rounded-lg text-center">
-          ⚠️ Ensure <strong>Row-Level Security (RLS)</strong> is disabled for the "product" table in Supabase.
-        </div>
+        
       </div>
 
       {/* Add Product Form */}
