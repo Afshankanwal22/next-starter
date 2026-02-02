@@ -33,13 +33,14 @@ export default function Contact() {
       {/* CONTACT SECTION */}
       <section className="relative min-h-screen flex items-center justify-center px-6 bg-gradient-to-br from-blue-100 via-white to-blue-50 overflow-hidden">
 
-        {/* Background Blobs */}
-        <div className="absolute top-0 -left-10 w-72 h-72 bg-blue-400 rounded-full blur-3xl opacity-30"></div>
-        <div className="absolute bottom-0 -right-10 w-72 h-72 bg-purple-400 rounded-full blur-3xl opacity-30"></div>
+        {/* Decorative Background Blobs */}
+        <div className="absolute top-0 -left-10 w-72 h-72 bg-blue-400 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+        <div className="absolute bottom-0 -right-10 w-72 h-72 bg-purple-400 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+        <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-yellow-200 rounded-full blur-3xl opacity-20 animate-ping"></div>
 
         <div className="relative z-10 max-w-6xl w-full grid md:grid-cols-2 gap-14 items-center">
 
-          {/* LEFT */}
+          {/* LEFT - Contact Info */}
           <div>
             <h1 className="text-5xl font-extrabold text-gray-800 leading-tight">
               Let’s Talk <br />
@@ -51,15 +52,15 @@ export default function Contact() {
               Our ecommerce experts are ready to help ✨
             </p>
 
-            <div className="mt-10 space-y-4 text-gray-700">
+            <div className="mt-10 space-y-4 text-gray-700 text-md font-medium">
               <p>📍 Karachi, Pakistan</p>
-              <p>📧 support@shopease.com</p>
-              <p>📞 +92 300 1234567</p>
+              <p>📧 <a href="mailto:support@shopease.com" className="hover:text-blue-600 transition">support@shopease.com</a></p>
+              <p>📞 <a href="tel:+923001234567" className="hover:text-blue-600 transition">+92 300 1234567</a></p>
             </div>
           </div>
 
-          {/* FORM */}
-          <div className="bg-white/70 backdrop-blur-xl shadow-2xl rounded-3xl p-10">
+          {/* RIGHT - Form */}
+          <div className="bg-white/70 backdrop-blur-xl shadow-2xl rounded-3xl p-10 hover:shadow-3xl transition duration-500">
             <h2 className="text-2xl font-bold text-center mb-8">
               Send us a message 🚀
             </h2>
@@ -71,7 +72,7 @@ export default function Contact() {
                 <input
                   required
                   placeholder="Your Name"
-                  className="w-full pl-12 py-3 rounded-xl border"
+                  className="w-full pl-12 py-3 rounded-xl border border-gray-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-200 outline-none transition"
                 />
               </div>
 
@@ -81,7 +82,7 @@ export default function Contact() {
                   type="email"
                   required
                   placeholder="Your Email"
-                  className="w-full pl-12 py-3 rounded-xl border"
+                  className="w-full pl-12 py-3 rounded-xl border border-gray-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-200 outline-none transition"
                 />
               </div>
 
@@ -91,13 +92,13 @@ export default function Contact() {
                   rows="4"
                   required
                   placeholder="Your Message"
-                  className="w-full pl-12 py-3 rounded-xl border"
+                  className="w-full pl-12 py-3 rounded-xl border border-gray-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-200 outline-none transition resize-none"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl font-semibold hover:scale-[1.02] transition"
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl font-semibold hover:scale-[1.03] transition shadow-lg hover:shadow-2xl"
               >
                 Send Message 💌
               </button>
