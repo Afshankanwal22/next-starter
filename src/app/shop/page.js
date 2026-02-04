@@ -8,7 +8,7 @@ import AddToCartModal from "@/components/AddToCartModal";
 
 export default function ShopPage() {
   const [products, setProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null); // For modal
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -20,21 +20,16 @@ export default function ShopPage() {
       if (error) console.error(error.message);
       else setProducts(data || []);
     };
-
     fetchProducts();
   }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      <header className="sticky top-0 z-50">
-        <Navbar />
-      </header>
+      <Navbar />
 
-      <section className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white py-8">
-        <div className="container mx-auto text-center">
-          <h1 className="text-4xl font-bold">Shop Our Products</h1>
-          <p className="mt-2 text-lg">Browse and add your favorite items to the cart</p>
-        </div>
+      <section className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white py-8 text-center">
+        <h1 className="text-4xl font-bold">Shop Our Products</h1>
+        <p className="mt-2 text-lg">Browse and add your favorite items to the cart</p>
       </section>
 
       <main className="flex-grow container mx-auto px-4 py-10">
@@ -45,20 +40,16 @@ export default function ShopPage() {
             {products.map((product) => (
               <div
                 key={product.id}
-                className="relative bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-4 flex flex-col items-center hover:scale-105 transform transition duration-300 cursor-pointer group overflow-hidden"
+                className="relative bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-4 flex flex-col items-center hover:scale-105 transition duration-300 cursor-pointer group overflow-hidden"
               >
-                <div className="w-full h-48 flex items-center justify-center mb-4">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-contain rounded-xl drop-shadow-md group-hover:scale-110 transition-transform duration-300"
-                  />
-                </div>
-
+                <img
+                  src={product.image || "/images/pic1.avif"}
+                  alt={product.name}
+                  className="w-full h-48 object-contain rounded-xl mb-4"
+                />
                 <h2 className="text-lg md:text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition">
                   {product.name}
                 </h2>
-                <p className="text-gray-500 text-sm mt-1">{product.description || product.name}</p>
                 <p className="text-blue-600 font-bold mt-2">Rs. {product.price}</p>
 
                 <button
@@ -67,22 +58,15 @@ export default function ShopPage() {
                 >
                   Add to Cart
                 </button>
-
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-600/10 via-transparent opacity-0 group-hover:opacity-20 rounded-2xl transition-opacity duration-300"></div>
               </div>
             ))}
           </div>
         )}
       </main>
 
-      {/* AddToCart Modal */}
-      {selectedProduct && (
-        <AddToCartModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
-      )}
+      <AddToCartModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
 
-      <footer className="bg-gray-900 text-white mt-10">
-        <Footer />
-      </footer>
+      <Footer />
     </div>
   );
 }
