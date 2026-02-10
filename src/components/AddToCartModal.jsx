@@ -1,15 +1,24 @@
 "use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation"; // Next.js 13+ (App Router)
 
 export default function AddToCartModal({ product, onClose }) {
   const [qty, setQty] = useState(1);
+  const router = useRouter(); // Router hook
 
-  if (!product) return null; // modal hidden if no product
+  if (!product) return null;
 
-  // handle price as string or number
-  const price = typeof product.price === "string"
-    ? Number(product.price.replace("$", "").replace("Rs.", ""))
-    : Number(product.price);
+  const price =
+    typeof product.price === "string"
+      ? Number(product.price.replace("$", "").replace("Rs.", ""))
+      : Number(product.price);
+
+  // Navigate to checkout page
+  const handleCheckout = () => {
+    // Optional: pass product and qty in query params
+    router.push("/CheckoutPage");
+  };
 
   return (
     <>
@@ -25,7 +34,9 @@ export default function AddToCartModal({ product, onClose }) {
           {/* Header */}
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold">Your Cart</h2>
-            <button onClick={onClose} className="text-2xl hover:rotate-90 transition">✕</button>
+            <button onClick={onClose} className="text-2xl hover:rotate-90 transition">
+              ✕
+            </button>
           </div>
 
           {/* Product Info */}
@@ -37,9 +48,7 @@ export default function AddToCartModal({ product, onClose }) {
             />
             <div>
               <h3 className="font-semibold">{product.title || product.name}</h3>
-              <p className="text-blue-600 font-bold">
-                Rs. {price.toFixed(2)}
-              </p>
+              <p className="text-blue-600 font-bold">Rs. {price.toFixed(2)}</p>
             </div>
           </div>
 
@@ -54,12 +63,13 @@ export default function AddToCartModal({ product, onClose }) {
           </div>
 
           {/* Total */}
-          <div className="mt-6 font-bold text-lg">
-            Total: Rs. {(price * qty).toFixed(2)}
-          </div>
+          <div className="mt-6 font-bold text-lg">Total: Rs. {(price * qty).toFixed(2)}</div>
 
-          {/* Checkout */}
-          <button className="mt-auto bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl font-semibold shadow-lg">
+          {/* Checkout Button */}
+          <button
+            onClick={handleCheckout}
+            className="mt-auto bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl font-semibold shadow-lg"
+          >
             Proceed to Checkout
           </button>
         </div>

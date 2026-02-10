@@ -4,8 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import Swal from "sweetalert2";
-import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import AuthAPI from "@/api/authApi"; // ✅ Correct API
 
 export default function Signup() {
   const router = useRouter();
@@ -31,32 +31,28 @@ export default function Signup() {
 
     setLoading(true);
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    try {
+      await AuthAPI.post("/auth/signup", { email, password }); // ✅ AuthAPI used
 
-    setLoading(false);
-
-    if (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Signup Failed",
-        text: error.message,
-      });
-    } else {
       Swal.fire({
         icon: "success",
         title: "Account Created 🎉",
-        text: "Please check your email to verify your account",
+        text: "You can now login",
         confirmButtonText: "Go to Login",
-      }).then(() => {
-        router.push("/login");
-      });
+      }).then(() => router.push("/login"));
 
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Signup Failed",
+        text: error.response?.data?.message || "Something went wrong",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,24 +60,14 @@ export default function Signup() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-100">
       <div className="bg-white shadow-2xl rounded-2xl p-10 w-full max-w-md relative overflow-hidden">
 
-        {/* Decorative Circles */}
-        <div className="absolute -top-10 -left-10 w-32 h-32 bg-blue-200 rounded-full opacity-50"></div>
-        <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-300 rounded-full opacity-50"></div>
+        <h2 className="text-3xl font-bold text-center text-blue-600">Create Account</h2>
+        <p className="text-center text-gray-500 mt-2">Join ShopHub & start shopping</p>
 
-        <h2 className="text-3xl font-bold text-center text-blue-600 relative z-10">
-          Create Account
-        </h2>
-        <p className="text-center text-gray-500 mt-2 relative z-10">
-          Join ShopHub & start shopping
-        </p>
-
-        <form onSubmit={handleSubmit} className="mt-8 relative z-10">
+        <form onSubmit={handleSubmit} className="mt-8">
 
           {/* Email */}
           <div className="mb-6">
-            <label className="block text-gray-700 font-medium mb-2">
-              Email
-            </label>
+            <label className="block text-gray-700 font-medium mb-2">Email</label>
             <input
               type="email"
               required
@@ -94,14 +80,13 @@ export default function Signup() {
 
           {/* Password */}
           <div className="mb-6 relative">
-            <label className="block text-gray-700 font-medium mb-2">
-              Password
-            </label>
+            <label className="block text-gray-700 font-medium mb-2">Password</label>
             <input
               type={showPassword ? "text" : "password"}
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter password"
               className="w-full px-4 py-3 border rounded-xl pr-12 focus:ring-2 focus:ring-blue-400 outline-none"
             />
             <button
@@ -115,28 +100,25 @@ export default function Signup() {
 
           {/* Confirm Password */}
           <div className="mb-6 relative">
-            <label className="block text-gray-700 font-medium mb-2">
-              Confirm Password
-            </label>
+            <label className="block text-gray-700 font-medium mb-2">Confirm Password</label>
             <input
               type={showConfirmPassword ? "text" : "password"}
               required
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm password"
               className="w-full px-4 py-3 border rounded-xl pr-12 focus:ring-2 focus:ring-blue-400 outline-none"
             />
             <button
               type="button"
-              onClick={() =>
-                setShowConfirmPassword(!showConfirmPassword)
-              }
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               className="absolute top-9 right-4 text-gray-400"
             >
               {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
             </button>
           </div>
 
-          {/* Button */}
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -146,11 +128,9 @@ export default function Signup() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-gray-500 relative z-10">
+        <p className="mt-6 text-center text-gray-500">
           Already have an account?{" "}
-          <Link href="/login" className="text-blue-600 font-semibold">
-            Login
-          </Link>
+          <Link href="/login" className="text-blue-600 font-semibold">Login</Link>
         </p>
       </div>
     </div>
